@@ -1,4 +1,5 @@
-This is a webscraping program for gathering information (features, pricing) about recreational vehicles' sales offers.
+Webscraper for gathering information (features, pricing) about RV sales offers.
 
-It's been completed with BeautifulSoup and Selenium library.
-To run it, you have to make sure you have firefox-geckodriver installed.
+Completed with BeautifulSoup, Selenium and Python.
+
+Before running, make sure you have firefox-geckodriver installed.

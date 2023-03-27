@@ -30,21 +30,18 @@ def write_to_csv(dict_list, file_name, mode):
 
 if __name__ == "__main__":
     FUEL_TYPE = 'diesel'
-    #current_page = WEBPAGE_TEMPLATE.format(fuel=FUEL_TYPE)
-    current_page = 'https://rv.campingworld.com/searchresults?external_assets=false&rv_type=motorized&condition=new_used&subtype=A%2CAD%2CB%2CBP%2CC&floorplans=class-a%2Ccafl%2Ccabh%2Ccab2%2Ccarb%2Ccath%2Ccarl%2Cclass-b%2Ccbbh%2Ccbfl%2Ccbrb%2Ccbrl%2Cclass-c%2Cccbh%2Cccfl%2Cccth%2Cccbaah%2Cccrb%2Cccrl&slides_max=0&fueltype=diesel&sort=featured_asc&search_mode=advanced&locations=nationwide&scpc=&apiSearch=0&make=&landingMake=0&page=59'
+    current_page = WEBPAGE_TEMPLATE.format(fuel=FUEL_TYPE)
 
     all_offers = []
 
     while current_page:
-        page_offers = []
         print(current_page)
+        page_offers = []
         soup = BeautifulSoup(get_page_source(current_page), "html.parser")
         for index, offer_tag in enumerate(get_offers_tags(soup)):
-            print(index)
             offer = get_offer_details(offer_tag, index, soup)
             all_offers.append(offer)
             page_offers.append(offer)
             current_page = get_next_page_url(soup)
-        write_to_csv(page_offers, 'appended_results2.csv', 'a')
-        #time.sleep(2)
-    write_to_csv(all_offers, 'all_results2.csv', 'w')
+        write_to_csv(page_offers, 'results.csv', 'a')
+        time.sleep(1)

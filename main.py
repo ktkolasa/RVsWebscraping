@@ -1,14 +1,14 @@
 """
 Main to run webscraping process
 """
-
+import sys
 import time
 import csv
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
 
-from config import WEBPAGE_TEMPLATE
+from config import MAIN_SEARCHRESULTS_TEMPLATE, RESULTS_FILE, MAIN_SEARCHRESULTS_URL
 from offer_parser import get_offer_details
 from main_page_parser import get_offers_tags, get_next_page_url
 from source_methods import get_page_source
@@ -17,7 +17,7 @@ browser = webdriver.Firefox()
 
 
 def get_page_url_for_fuel_type(fuel_type):
-    return WEBPAGE_TEMPLATE.format(fuel=fuel_type)
+    return MAIN_SEARCHRESULTS_TEMPLATE.format(fuel=fuel_type)
 
 
 def write_to_csv(dict_list, file_name, mode):
@@ -30,7 +30,15 @@ def write_to_csv(dict_list, file_name, mode):
 
 if __name__ == "__main__":
     FUEL_TYPE = 'diesel'
-    current_page = WEBPAGE_TEMPLATE.format(fuel=FUEL_TYPE)
+    if len(sys.argv) >= 2:
+        input_fuel_type = sys.argv[1]
+        if input_fuel_type in ('gas', 'all', 'diesel'):
+            FUEL_TYPE = input_fuel_type
+
+    if FUEL_TYPE in ['gas', 'diesel']:
+        current_page = MAIN_SEARCHRESULTS_TEMPLATE.format(fuel=FUEL_TYPE)
+    else:
+        current_page = MAIN_SEARCHRESULTS_URL
 
     all_offers = []
 
@@ -43,5 +51,5 @@ if __name__ == "__main__":
             all_offers.append(offer)
             page_offers.append(offer)
             current_page = get_next_page_url(soup)
-        write_to_csv(page_offers, 'results.csv', 'a')
+        write_to_csv(page_offers, RESULTS_FILE, 'a')
         time.sleep(1)

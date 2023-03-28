@@ -1,12 +1,12 @@
 """
-Methods for parsing main ofer list apart from offer details
+Methods for parsing main offer list apart from offer details
 """
 
 
 def get_next_page_url(soup):
-    next = soup.find("a", {"class": "pag-btn next"})
-    if next:
-        return next.get("href")
+    next_page = soup.find("a", {"class": "pag-btn next"})
+    if next_page:
+        return next_page.get("href")
     else:
         return None
 

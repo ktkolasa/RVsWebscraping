@@ -4,6 +4,7 @@ Methods concerning sending requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
 
+
 def get_page_source(page_url: str) -> str:
     """
     Send get request and return page HTML

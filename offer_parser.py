@@ -1,5 +1,6 @@
 from rvdetails_parser import get_horsepower
 import re
+from config import COLLECT_HORSEPOWER_PRICE_THRESHOLD
 
 
 def get_offer_name(soup, index):
@@ -11,8 +12,6 @@ def get_location_and_stock_id(soup, index):
     my_dict = dict()
     location = soup.find_all("span", {"class": "stock-results"})[4*index].text
     stock_id = soup.find_all("span", {"class": "stock-results"})[4*index+1].text
-    if not location:
-        print("No location found")
     my_dict["location"] = location.replace(" ", "")
     my_dict["stock_id"] = stock_id.replace(" ", "").replace("Stock#", "")
     return my_dict
@@ -20,6 +19,7 @@ def get_location_and_stock_id(soup, index):
 
 def get_offer_url(tag):
     return tag.find("a", {"class": "segment-nav-link"})["href"]
+
 
 def get_stock_id(tag):
     y = tag.find_all("span", {"class": "stock-results"})
@@ -45,8 +45,6 @@ def get_specs_dict(soup, index):
                 specs_dict["slide_outs"] = "-"
             else:
                 specs_dict["slide_outs"] = spec.text.split()[-2]
-    if not specs_dict:
-        print("no specs!")
     return specs_dict
 
 
@@ -64,10 +62,8 @@ def get_offer_details(tag, index, soup):
     offer_dict.update(get_specs_dict(soup, index))
     offer_dict['price'] = get_price(soup, index)
 
-    if offer_dict['price'] > 300000:
-        print("getting horsepower for", offer_dict['price'] )
+    if offer_dict['price'] > COLLECT_HORSEPOWER_PRICE_THRESHOLD:
         offer_dict['horsepower'] = get_horsepower(offer_dict["offer_url"])
     else:
         offer_dict['horsepower'] = '-'
-    print(offer_dict)
     return offer_dict
